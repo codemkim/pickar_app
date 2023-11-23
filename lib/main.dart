@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'config/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'ui/pages/init_page.dart';
+import 'ui/pages/home_page.dart';
+import 'ui/pages/login_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -16,7 +18,11 @@ class Pickar extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Pickar app',
-      home: InitPage(),
-    );
+      initialRoute: "/init",
+      routes: {
+            '/init': (context) => InitPage(),
+            '/home': (context) => HomePage(),
+            '/login': (context) => LoginPage(),
+          });
   }
 }

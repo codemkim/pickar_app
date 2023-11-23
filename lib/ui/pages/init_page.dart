@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'login_page.dart';
+import 'home_page.dart';
 import 'dart:async';
 
 
@@ -15,7 +15,7 @@ class _InitPageState extends State<InitPage> {
     super.initState();
     Timer(Duration(seconds: 2), () {
       Navigator.of(context).pushReplacement(MaterialPageRoute(
-        builder: (context) => LoginPage(), // 여기서 LoginScreen은 로그인 화면 위젯입니다.
+        builder: (context) => HomePage(), // 여기서 LoginScreen은 로그인 화면 위젯입니다.
       ));
     });
   }
