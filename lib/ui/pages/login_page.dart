@@ -291,7 +291,9 @@ class _LoginPageState extends State<LoginPage> {
                             children: [
                               TextButton(
                                 onPressed: () {
-                                  
+                                  Navigator.of(context).pushNamedAndRemoveUntil(
+                                      '/privacy',
+                                      (Route<dynamic> route) => false);
                                 },
                                 child: const Text('픽카가 처음이신가요?',
                                     style: TextStyle(
