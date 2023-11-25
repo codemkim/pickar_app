@@ -1,4 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:pickar_app/models/social_model.dart';
+import 'package:pickar_app/social/kakao_login.dart';
 
 
 class HomePage extends StatefulWidget {
@@ -8,6 +12,26 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+
+  final kakaoModel = SocialModel(KakaoLogin());
+
+  Future<UserCredential> _signInWithGoogle() async {
+  // Trigger the authentication flow
+    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+    // Obtain the auth details from the request
+    final GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
+
+    // Create a new credential
+    final credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth?.accessToken,
+      idToken: googleAuth?.idToken,
+    );
+
+    // Once signed in, return the UserCredential
+    return await FirebaseAuth.instance.signInWithCredential(credential);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -179,7 +203,7 @@ class _HomePageState extends State<HomePage> {
               left: 20,
               child: TextButton(
                     onPressed: () {
-                      print(111111);
+                      _signInWithGoogle();
                     },
                     style: TextButton.styleFrom(
                       primary: Colors.white,
@@ -224,8 +248,13 @@ class _HomePageState extends State<HomePage> {
               right: 20,
               left: 20,
               child: TextButton(
-                    onPressed: () {
-                      print(111111);
+                    onPressed: () async{
+                      await kakaoModel.login();
+
+                      print(kakaoModel.isLogined);
+                      setState(() {
+                        
+                      });
                     },
                     style: TextButton.styleFrom(
                       primary: Colors.white,
