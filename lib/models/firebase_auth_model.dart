@@ -5,7 +5,7 @@ class FirebaseAuthModel {
 
   Future<String> createCustomToken(Map<String, dynamic> user) async {
     final customTokenResponse = await http.post(Uri.parse(url), body: user);
-
+    
     return customTokenResponse.body;
   }
 }

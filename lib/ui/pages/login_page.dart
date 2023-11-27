@@ -1,5 +1,11 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:loading_overlay/loading_overlay.dart';
+import 'package:pickar_app/models/social_model.dart';
+import 'package:pickar_app/social/kakao_login.dart';
+
 
 class LoginPage extends StatefulWidget {
 
@@ -9,326 +15,350 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
 
-  TextEditingController emailTextController = TextEditingController();
-  TextEditingController pwTextController = TextEditingController();
-
-  SharedPreferences? prefs;
-  bool _passwordVisible = false;
-
-
-
-  @override
-  void initState() {
-    Future.delayed(Duration(microseconds: 100), () async {
-        // load shared preferences
-      prefs = await SharedPreferences.getInstance();
-      print("loading shared preferences");
-      setState(() => emailTextController.text = prefs?.getString('useremail') ?? "");
-    });
-  }
-
-
-  void _showMessageDialog(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Row(
-          children: <Widget>[
-            Container(
-              width: 5,
-              height: 5,
-              decoration: BoxDecoration(
-                color: Colors.red,
-                shape: BoxShape.circle, // 원형 모양
-              ),
-            ),
-            SizedBox(width: 10), // 점과 텍스트 사이의 간격
-            Expanded(
-              child: Text(
-                message,
-                style: TextStyle(color: Colors.white, fontSize: 16, fontFamily: 'Pretendard'),
-              ),
-            ),
-          ],
-        ),
-        duration: Duration(seconds: 1), // 1초 후에 사라짐
-        behavior: SnackBarBehavior.floating, // 'floating'으로 설정하여 하단에서 떠오름
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12), // 모서리 둥글게
-        ),
-        margin: EdgeInsets.only(left: 20, right: 20, bottom: 10, top:20), // 하단에 10만큼의 마진을 줌
-      ),
-    );
-    
-  }
-  
+  final socialModel = SocialModel(SocialLogin());
+  bool _isLoading = false;
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: GestureDetector(
-        onTap: (){
-          FocusScope.of(context).unfocus();
-        },
-        child: Container(
-            width: double.infinity,
-            height: double.infinity,
-            color: Colors.transparent,
-            
-        child: Stack(
-          children: [
-            Positioned(
-              left: 20,
-              top: 40,
-              child: GestureDetector(
-                onTap: () {
-                  Navigator.of(context).pushNamedAndRemoveUntil(
-                                      '/home',
-                                      (Route<dynamic> route) => false);
-                }, 
-                child: Container(
-                  width: 72,
-                  height: 28,
-                  child: Image.asset('assets/images/main_logo.png'),
-                ),
-              )
-            ),
-            Positioned(
-              left: 20,
-              top: 110,
-              child: Text(
-                '픽카',
-                style: TextStyle(
-                        color: Color(0xFF1F222B),
-                        fontSize: 28,
-                        fontFamily: 'Pretendard',
-                        fontWeight: FontWeight.bold,
-                        height: 0.08,
-                        letterSpacing: -0.51,
-                      ),
-              ),
-            ),
-            Positioned(
-              left: 20,
-              top: 145,
-              child: Text(
-                '회원으로 로그인',
-                style: TextStyle(
-                        color: Color(0xFF1F222B),
-                        fontSize: 28,
-                        fontFamily: 'Pretendard',
-                        fontWeight: FontWeight.w300,
-                        height: 0.08,
-                        letterSpacing: -0.51,
-                      ),
-              ),
-            ),
-            Positioned(
-              left: 20,
-              top: 215,
-              child: Text(
-                '이메일',
-                style: TextStyle(
-                        color: Color(0xFF1F222B),
-                        fontSize: 14,
-                        fontFamily: 'Pretendard',
-                        fontWeight: FontWeight.w300,
-                        height: 0.08,
-                        letterSpacing: -0.51,
-                      ),
-              ),
-            ),
-            Positioned(
-              left: 20,
-              top: 235,
-              child: Container(
-                width: MediaQuery.of(context).size.width - 40, // 적절한 너비 지정
-                height: 60, // 적절한 높이 지정
-                child: TextFormField(
-                  keyboardType: TextInputType.emailAddress,
-                  decoration: InputDecoration(
-                    contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
-                    fillColor: Colors.transparent,
-                    hintText: '이메일을 입력해주세요',
-                    hintStyle: TextStyle(
-                    fontSize: 16, // 글꼴 크기
-                    color: Color(0xff989FB2), // 텍스트 색상
-                      fontWeight: FontWeight.normal, // 글꼴 두께
-                      fontFamily: 'Pretendard',
-                      // 여기에 다른 스타일 속성 추가 가능
+    return LoadingOverlay(
+      isLoading: _isLoading,
+      opacity: 0.5,
+      progressIndicator: LoadingAnimationWidget.staggeredDotsWave(
+            color: Colors.blue, size: 50),
+      child: Scaffold(
+        body: GestureDetector(
+          onTap: (){
+            FocusScope.of(context).unfocus();
+          },
+          child: Stack(
+                children: [
+                  Positioned(
+                    left: 24,
+                    top: 40,
+                    child: Container(
+                      width: 72,
+                      height: 28,
+                      child: Image.asset('assets/images/main_logo.png'),
                     ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(15),
-                      borderSide: BorderSide(
-                        color: Color(0xffD7DDED), // 변경된 경계선 색상
-                        width: 1, // 변경된 경계선 너비
-                      ),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(15),
-                      borderSide: BorderSide(
-                        width: 1,
-                        color: Colors.black,
-                      ),
-                    ),
-                    
                   ),
-                  style: TextStyle(
-                    fontSize: 16, // 글꼴 크기
-                    color: Color(0xff989FB2), // 텍스트 색상
-                    fontWeight: FontWeight.normal, // 글꼴 두께
-                    fontFamily: 'Pretendard',
-                    // 여기에 다른 스타일 속성 추가 가능
-                  ),
-                  
-                  controller: emailTextController,
-                  
-                ),
-              ),
-            ),
-            Positioned(
-              left: 20,
-              top: 310,
-              child: Text(
-                '비밀번호',
-                style: TextStyle(
-                        color: Color(0xFF1F222B),
-                        fontSize: 14,
-                        fontFamily: 'Pretendard',
-                        fontWeight: FontWeight.w300,
-                        height: 0.08,
-                        letterSpacing: -0.51,
-                      ),
-              ),
-            ),
-            Positioned(
-              left: 20,
-              top: 330,
-              child: Container(
-                width: MediaQuery.of(context).size.width - 40, // 적절한 너비 지정
-                height: 60, // 적절한 높이 지정
-                child: TextFormField(
-                  keyboardType: TextInputType.text,
-                  obscureText: !_passwordVisible,
-                  decoration: InputDecoration(
-                    contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
-                    fillColor: Colors.transparent,
-                    suffixIcon: IconButton(
-                                icon: Icon(
-                                    _passwordVisible
-                                        ? Icons.visibility
-                                        : Icons.visibility_off,
-                                    color: Colors.grey),
-                                onPressed: () {
-                                  setState(() {
-                                    _passwordVisible = !_passwordVisible;
-                                  });
-                                },
-                              ),
-                    hintText: '비밀번호를 입력해주세요',
-                    hintStyle: TextStyle(
-                    fontSize: 16, // 글꼴 크기
-                    color: Color(0xff989FB2), // 텍스트 색상
-                      fontWeight: FontWeight.normal, // 글꼴 두께
-                      fontFamily: 'Pretendard',
-                      // 여기에 다른 스타일 속성 추가 가능
+                  Positioned(
+                    left: 165,
+                    top: 151,
+                    child: Container(
+                      width: 28,
+                      height: 45.07,
+                      child: Image.asset('assets/images/logo_small.png'),
                     ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(15),
-                      borderSide: BorderSide(
-                        color: Color(0xffD7DDED), // 변경된 경계선 색상
-                        width: 1, // 변경된 경계선 너비
-                      ),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(15),
-                      borderSide: BorderSide(
-                        width: 1,
-                        color: Colors.black,
-                      ),
-                    ),
-                    
                   ),
-                  style: TextStyle(
-                    fontSize: 16, // 글꼴 크기
-                    color: Color(0xff989FB2), // 텍스트 색상
-                    fontWeight: FontWeight.normal, // 글꼴 두께
-                    fontFamily: 'Pretendard',
-                    // 여기에 다른 스타일 속성 추가 가능
-                  ),
-                  
-                  controller: pwTextController,
-                  
-                ),
-              ),
-            ),
-            Positioned(
-              left: 20,
-              top:410,
-              child: Container(
-                        width: MediaQuery.of(context).size.width - 40, // 적절한 너비 지정
-                        height: 200,
-                        child: Column(children: [
-                          ElevatedButton(
-                            onPressed: () {
-                              _showMessageDialog('이메일/비밀번호를 확인해주세요');
-                            },
-                            child: Text(
-                              "로그인",
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: Colors.white,
-                                fontWeight: FontWeight.normal,
-                              ),
+                  Positioned(
+                    left: 24,
+                    top: 100,
+                    child: Text.rich(
+                      TextSpan(
+                        children: [
+                          TextSpan(
+                            text: '주차 공간',
+                            style: TextStyle(
+                              color: Color(0xFF235DFF),
+                              fontSize: 36,
+                              fontFamily: 'Pretendard',
+                              fontWeight: FontWeight.w700,
+                              height: 0,
+                              letterSpacing: -1.08,
                             ),
-                            style: ElevatedButton.styleFrom(
-                                minimumSize: const Size.fromHeight(50),
-                                backgroundColor: Color(0xff235DFF),
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10)),
-                                elevation: 5,
-                                shadowColor: Colors.black),
                           ),
-                          const SizedBox(height: 35),
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.of(context).pushNamedAndRemoveUntil(
-                                      '/privacy',
-                                      (Route<dynamic> route) => false);
-                                },
-                                child: const Text('픽카가 처음이신가요?',
-                                    style: TextStyle(
-                                      color: Color(0xff235DFF),
+                          TextSpan(
+                            text: '을',
+                            style: TextStyle(
+                              color: Color(0xFF1E212A),
+                              fontSize: 36,
+                              fontFamily: 'Pretendard',
+                              fontWeight: FontWeight.w300,
+                              height: 0,
+                              letterSpacing: -1.08,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    left: 24,
+                    top: 145,
+                    child: Text.rich(
+                      TextSpan(
+                        children: [
+                          TextSpan(
+                            text: '공유 ',
+                            style: TextStyle(
+                              color: Color(0xFF235DFF),
+                              fontSize: 36,
+                              fontFamily: 'Pretendard',
+                              fontWeight: FontWeight.w700,
+                              height: 0,
+                              letterSpacing: -1.08,
+                            ),
+                          ),
+                          TextSpan(
+                            text: '하는',
+                            style: TextStyle(
+                              color: Color(0xFF1E212A),
+                              fontSize: 36,
+                              fontFamily: 'Pretendard',
+                              fontWeight: FontWeight.w300,
+                              height: 0,
+                              letterSpacing: -1.08,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    left: 24,
+                    top: 190,
+                    child: Text(
+                      '새로운 방법',
+                      style: TextStyle(
+                        color: Color(0xFF1E212A),
+                        fontSize: 36,
+                        fontFamily: 'Pretendard',
+                        fontWeight: FontWeight.w300,
+                        height: 0,
+                        letterSpacing: -1.08,
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    left: 24,
+                    top: 275,
+                    child: Text(
+                      '모두를 위한',
+                      style: TextStyle(
+                              color: Color(0xFF737A8B),
+                              fontSize: 17,
+                              fontFamily: 'Pretendard',
+                              fontWeight: FontWeight.w300,
+                              height: 0.08,
+                              letterSpacing: -0.51,
+                            ),
+                    ),
+                  ),
+                  Positioned(
+                    left: 24,
+                    top: 300,
+                    child: Text.rich(
+                      TextSpan(
+                        children: [
+                          TextSpan(
+                            text: '주차 리워드',
+                            style: TextStyle(
+                              color: Color(0xFF737A8B),
+                              fontSize: 17,
+                              fontFamily: 'Pretendard',
+                              fontWeight: FontWeight.w700,
+                              height: 0.08,
+                              letterSpacing: -0.51,
+                            ),
+                          ),
+                          TextSpan(
+                            text: ' 플랫폼, 픽카',
+                            style: TextStyle(
+                              color: Color(0xFF737A8B),
+                              fontSize: 17,
+                              fontFamily: 'Pretendard',
+                              fontWeight: FontWeight.w300,
+                              height: 0.08,
+                              letterSpacing: -0.51,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    right: 0,
+                    top: 200,
+                    child: Image.asset('assets/images/car.png'),
+                  ),
+                  Positioned(
+                    right: 0,
+                    top: 440,
+                    child: Image.asset('assets/images/bottom_shadow.png'),
+                  ),
+                
+                
+                  Positioned(
+                    top: 500,
+                    right: 20,
+                    left: 20,
+                    child: TextButton(
+                          onPressed: () {
+                            setState(() {
+                              _isLoading = true;
+                            });
+                            socialModel.googleLogin();
+                            // socialModel.googleLogin();
+                          },
+                          style: TextButton.styleFrom(
+                            primary: Colors.white,
+                            minimumSize: Size(315, 50),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20),
+                              side: BorderSide(color: Color(0xFFEBEBEB))
+                            ),
+                            backgroundColor: Colors.transparent,
+                            padding: EdgeInsets.zero, // 내부 패딩을 0으로 설정하여 왼쪽 정렬이 가능하도록 함
+                          ),
+                          child: IntrinsicHeight(
+                            child: Row(
+                              children: <Widget>[
+                                Padding(
+                                  padding: EdgeInsets.only(left: 16), // 여기를 조절하여 아이콘의 왼쪽 패딩을 설정
+                                  child: Image.asset('assets/images/google_logo.png', width: 24), // 아이콘으로 사용할 이미지
+                                ),
+                                Expanded(
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      '구글 로그인',
+                                      textAlign: TextAlign.center, 
+                                      style: TextStyle(
+                                      color: Colors.black, // 텍스트 색상을 검정색으로 설정
+                                    
+                                      fontSize: 16
+                                    ),
+                                    )
+                                    
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+              
+                  ),
+                  Positioned(
+                    top: 560,
+                    right: 20,
+                    left: 20,
+                    child: TextButton(
+                          onPressed: () async{
+                            setState(() {
+                              _isLoading = true;
+                            });
+                            await socialModel.kakaoLogin();
+                            
+                          },
+                          style: TextButton.styleFrom(
+                            primary: Colors.white,
+                            minimumSize: Size(315, 50),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            backgroundColor: Color(0xFFFEE500),
+                            padding: EdgeInsets.zero, // 내부 패딩을 0으로 설정하여 왼쪽 정렬이 가능하도록 함
+                          ),
+                          child: IntrinsicHeight(
+                            child: Row(
+                              children: <Widget>[
+                                Padding(
+                                  padding: EdgeInsets.only(left: 16), // 여기를 조절하여 아이콘의 왼쪽 패딩을 설정
+                                  child: Image.asset('assets/images/kakao_logo.png', width: 20), // 아이콘으로 사용할 이미지
+                                ),
+                                Expanded(
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      '카카오톡 로그인',
+                                      textAlign: TextAlign.center, 
+                                      style: TextStyle(
+                                      color: Colors.black,
+                                      
                                       fontSize: 16,
-                                      fontFamily: 'Pretendard',
-                                      fontWeight: FontWeight.w600
-                                      )),
-                              ),
-                              TextButton(
-                                onPressed: () {
-                                  
-                                },
-                                child: const Text('비밀번호를 잊어버리셨나요?',
-                                    style: TextStyle(
-                                      color: Color(0xff747A8B),
+                                    ),// 텍스트를 컨테이너의 가운데로 정렬
+                                      
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+              
+                  ),
+                  Positioned(
+                    top: 620,
+                    right: 20,
+                    left: 20,
+                    child: TextButton(
+                          onPressed: () {
+                            Navigator.of(context).pushNamedAndRemoveUntil(
+                                            '/login_pickar',
+                                            (Route<dynamic> route) => false);
+                          },
+                          style: TextButton.styleFrom(
+                            primary: Colors.white,
+                            minimumSize: Size(315, 50),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            backgroundColor: Color(0xFF235DFF),
+                            padding: EdgeInsets.zero, // 내부 패딩을 0으로 설정하여 왼쪽 정렬이 가능하도록 함
+                          ),
+                          child: IntrinsicHeight(
+                            child: Row(
+                              children: <Widget>[
+                                Padding(
+                                  padding: EdgeInsets.only(left: 16), // 여기를 조절하여 아이콘의 왼쪽 패딩을 설정
+                                  child: Image.asset('assets/images/pickar_logo.png', width: 24), // 아이콘으로 사용할 이미지
+                                ),
+                                Expanded(
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      '픽카 이메일 로그인',
+                                      
+                                      textAlign: TextAlign.center, // 텍스트를 컨테이너의 가운데로 정렬
+                                      style: TextStyle(
                                       fontSize: 16,
-                                      fontFamily: 'Pretendard',
-                                      fontWeight: FontWeight.w500
-                                      )),
-                              )
-                            ],
-                          )
-                        ])),
-            )
-            
-          ]
-        )
-      )
-      )
+                                      color: Colors.white,
+                                      
+                                    ),// 텍스트를 컨테
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                  ),
+                  Positioned.fill( // 화면을 채우는 Positioned 위젯
+                  top: 720,
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: RichText(
+                      text: TextSpan(
+                        style: TextStyle(
+                          fontSize: 10,
+                          color: Color(0xff747A8B),
+                        ),
+                        children: <TextSpan>[
+                          TextSpan(text: '간편 로그인 회원가입 시 '),
+                          TextSpan(
+                            text: '서비스 이용약관 개인정보 처리방침',
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          TextSpan(text: '에 동의하는 것으로 간주됩니다.'),
+                        ],
+                      ),
+                    ),
+                  ),
+                  )
+                ],
+              )
+        ),
+      ),
     );
   }
 }
-
-

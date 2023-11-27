@@ -43,6 +43,8 @@ dependencies:
   google_sign_in: ^6.1.6
   kakao_flutter_sdk: ^1.7.0
   http: ^1.1.0
+  loading_overlay: ^0.3.0
+  loading_animation_widget: ^1.2.0+4
 
 dev_dependencies:
   flutter_test:
