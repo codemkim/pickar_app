@@ -4,7 +4,8 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:loading_overlay/loading_overlay.dart';
 import 'package:pickar_app/models/social_model.dart';
-import 'package:pickar_app/social/kakao_login.dart';
+import 'package:pickar_app/social/social_login.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 
 class LoginPage extends StatefulWidget {
@@ -16,6 +17,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
 
   final socialModel = SocialModel(SocialLogin());
+  SharedPreferences? prefs;
   bool _isLoading = false;
 
   @override
@@ -193,11 +195,14 @@ class _LoginPageState extends State<LoginPage> {
                     right: 20,
                     left: 20,
                     child: TextButton(
-                          onPressed: () {
+                          onPressed: () async{
                             setState(() {
                               _isLoading = true;
                             });
-                            socialModel.googleLogin();
+                            await socialModel.googleLogin();
+                            setState(() {
+                              _isLoading = false;
+                            });
                             // socialModel.googleLogin();
                           },
                           style: TextButton.styleFrom(
@@ -248,6 +253,9 @@ class _LoginPageState extends State<LoginPage> {
                               _isLoading = true;
                             });
                             await socialModel.kakaoLogin();
+                            setState(() {
+                              _isLoading = false;
+                            });
                             
                           },
                           style: TextButton.styleFrom(

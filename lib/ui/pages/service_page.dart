@@ -1,7 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:pickar_app/models/social_model.dart';
-import 'package:pickar_app/social/kakao_login.dart';
+import 'package:pickar_app/social/social_login.dart';
 
 class ServicePage extends StatefulWidget {
 

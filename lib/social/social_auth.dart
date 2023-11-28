@@ -1,6 +1,6 @@
 abstract class SocialAuth {
-  Future<bool> login();
-  Future<bool> logout();
+  Future<bool> kakaoLogin();
+  Future<bool> kakaoLogout();
   Future<dynamic> googleLogin();
   Future<bool> googleLogout();
 }

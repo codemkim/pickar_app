@@ -4,7 +4,7 @@ import 'package:pickar_app/social/social_auth.dart';
 
 class SocialLogin implements SocialAuth {
   @override
-  Future<bool> login() async{
+  Future<bool> kakaoLogin() async{
     try {
       bool isInstalled = await kakao.isKakaoTalkInstalled();
       if (isInstalled) {
@@ -30,7 +30,7 @@ class SocialLogin implements SocialAuth {
   }
 
   @override
-  Future<bool> logout() async{
+  Future<bool> kakaoLogout() async{
     try {
       await kakao.UserApi.instance.unlink();
       return true;
