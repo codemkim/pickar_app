@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk_user.dart' as kakao;
+import 'package:kakao_map_plugin/kakao_map_plugin.dart';
 import 'package:pickar_app/ui/pages/home_page.dart';
 import 'package:pickar_app/ui/pages/service_page.dart';
 import 'config/firebase_options.dart';
@@ -13,6 +14,7 @@ import 'ui/pages/register_page.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   kakao.KakaoSdk.init(nativeAppKey: 'e5583bd8c079daebb72d7d57007521bf');
+  AuthRepository.initialize(appKey: '747028e635adf3aa5119c1d096c5323a');
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(const Pickar());
 }
