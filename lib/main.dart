@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk_user.dart' as kakao;
 import 'package:kakao_map_plugin/kakao_map_plugin.dart';
 import 'package:pickar_app/ui/pages/home_page.dart';
+import 'package:pickar_app/ui/pages/main_service_page.dart';
 import 'package:pickar_app/ui/pages/service_page.dart';
 import 'config/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -35,6 +36,7 @@ class Pickar extends StatelessWidget {
             '/privacy': (context) => PrivacyPage(),
             '/register': (context) => RegisterPage(),
             '/service': (context) => ServicePage(),
+            '/main_service': (context) => MainServicePage(),
             
 
           });

@@ -16,54 +16,40 @@ class _ServicePageState extends State<ServicePage> {
   final socialModel = SocialModel(SocialLogin());
   
   late KakaoMapController mapController;
-  late bool serviceEnabled;
-  LatLng _position = LatLng(0.0, 0.0);
+  bool serviceEnabled = false;
+  Set<Marker> markers = {};
   
   @override
   void initState(){
     
     Future.delayed(Duration.zero, () async {
         // load shared preferences
-        LocationPermission permission;
-    // 위치 서비스 활성화 여부 확인
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+      LocationPermission permission;
+  // 위치 서비스 활성화 여부 확인
+      serviceEnabled = await Geolocator.isLocationServiceEnabled();
 
-    print('serviceEnabled=====${serviceEnabled}');
-    if (!serviceEnabled) {
-      // 위치 서비스를 활성화하도록 요청
-      return Future.error('Location services are disabled.');
-    }
-
-    permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        // 권한이 거부된 경우 처리
-        return Future.error('Location permissions are denied');
+      print('serviceEnabled=====${serviceEnabled}');
+      if (!serviceEnabled) {
+        // 위치 서비스를 활성화하도록 요청
+        return Future.error('Location services are disabled.');
       }
-    }
-    
-    if (permission == LocationPermission.deniedForever) {
-      // 권한이 영구적으로 거부된 경우 처리
-      return Future.error(
-          'Location permissions are permanently denied, we cannot request permissions.');
-    } 
 
-    print('permission===${permission}');
-
-    // 현재 위치 얻기
-    Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.best);
-    print('position====${position}');
-    
-    _position = LatLng(position.latitude, position.longitude);
-
-    setState(() {
+      permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
+        if (permission == LocationPermission.denied) {
+          // 권한이 거부된 경우 처리
+          return Future.error('Location permissions are denied');
+        }
+      }
       
-    });
-      
-    });
+      if (permission == LocationPermission.deniedForever) {
+        // 권한이 영구적으로 거부된 경우 처리
+        return Future.error(
+            'Location permissions are permanently denied, we cannot request permissions.');
+      } 
+      });
     
-
   }
 
   @override
@@ -85,9 +71,33 @@ class _ServicePageState extends State<ServicePage> {
             width: 300,
             height: 300,
             child: KakaoMap(
+              onMapCreated: ((controller) async {
+                mapController = controller;
+                Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.best);
+                await mapController.setCenter(LatLng(position.latitude, position.longitude));
+
+                markers.add(Marker(
+                  markerId: markers.length.toString(),
+                  latLng: await mapController.getCenter(),
+                  width: 30,
+                  height: 44,
+                  offsetX: 15,
+                  offsetY: 44,
+                  markerImageSrc:
+                'https://w7.pngwing.com/pngs/96/889/png-transparent-marker-map-interesting-places-the-location-on-the-map-the-location-of-the-thumbnail.png',
+                  ));
+
+                setState(() {});
+
+
+              }),
+              onMarkerTap: ((markerId, latLng, zoomLevel) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('marker click:\n\n$latLng')));
+              }),
+              markers: markers.toList(),
               zoomControl: true,
               zoomControlPosition: ControlPosition.right,
-              // center: _position,
               
               
             ),

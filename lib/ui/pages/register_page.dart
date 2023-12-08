@@ -72,7 +72,8 @@ class _RegisterPageState extends State<RegisterPage> {
             FocusScope.of(context).unfocus();
           },
           child: Container(
-              height: double.infinity,
+              height: MediaQuery.of(context).size.height,
+              width: MediaQuery.of(context).size.width,
               color: Colors.transparent,
               padding: EdgeInsets.only(
                     right: 20,
