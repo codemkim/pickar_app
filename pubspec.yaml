@@ -47,6 +47,7 @@ dependencies:
   loading_animation_widget: ^1.2.0+4
   kakao_map_plugin: ^0.2.2
   geolocator: ^10.1.0
+  smooth_page_indicator: ^1.1.0
 
 dev_dependencies:
   flutter_test:
