@@ -40,12 +40,16 @@ class SocialModel {
   }
 
   Future logout() async {
-    await _socialLogin.googleLogout();
-    print('google logout complete');
-    await _socialLogin.kakaoLogout();
-    print('kakao logout complete');
-    await FirebaseAuth.instance.signOut();
-    print('firebase logout complete');
+    try {
+      await _socialLogin.googleLogout();
+      print('google logout complete');
+      // await _socialLogin.kakaoLogout();
+      print('kakao logout complete');
+      await FirebaseAuth.instance.signOut();
+      print('firebase logout complete');
+    } catch (e) {
+      print(e);;
+    }
     isLogined = false;
     user = null;
   }

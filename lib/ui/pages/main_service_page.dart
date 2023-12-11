@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:pickar_app/models/social_model.dart';
+import 'package:pickar_app/social/social_login.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class MainServicePage extends StatefulWidget {
@@ -13,6 +15,7 @@ class MainServicePage extends StatefulWidget {
 class _MainServicePageState extends State<MainServicePage> {
 
   final PageController _pageController = PageController();
+  final socialModel = SocialModel(SocialLogin());
   Timer? _timer;
 
   @override
@@ -59,6 +62,11 @@ class _MainServicePageState extends State<MainServicePage> {
       backgroundColor: Color(0xFFFEFEFE),
       actions: [
         IconButton(onPressed: () {}, icon: Icon(Icons.notifications)),
+        IconButton(onPressed: () async{
+
+          await socialModel.logout();
+
+        }, icon: Icon(Icons.logout)),
         IconButton(onPressed: () {}, icon: Icon(Icons.menu)),
       ],
     );
