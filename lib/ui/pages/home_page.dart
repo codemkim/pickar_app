@@ -29,7 +29,7 @@ class _HomePageState extends State<HomePage> {
                   
                 }
               } 
-              return LoadingAnimationWidget.staggeredDotsWave(color: Colors.blue, size: 50);
+              return LoadingAnimationWidget.staggeredDotsWave(color: Color(0xff64b9b2), size: 50);
             }
           );
   }

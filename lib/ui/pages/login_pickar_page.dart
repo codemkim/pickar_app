@@ -77,7 +77,7 @@ class _LoginPickarPageState extends State<LoginPickarPage> {
       isLoading: _isLoading,
       opacity: 0.5,
       progressIndicator: LoadingAnimationWidget.staggeredDotsWave(
-            color: Colors.blue, size: 50),
+            color: Color(0xff64b9b2), size: 50),
       child: Scaffold(
         body: GestureDetector(
           onTap: (){
@@ -92,27 +92,27 @@ class _LoginPickarPageState extends State<LoginPickarPage> {
             key: _key,
             child: Stack(
               children: [
+                // Positioned(
+                //   left: -10,
+                //   top: 0,
+                //   child: GestureDetector(
+                //     onTap: () {
+                //       Navigator.of(context).pushNamedAndRemoveUntil(
+                //                           '/home',
+                //                           (Route<dynamic> route) => false);
+                //     }, 
+                //     child: Container(
+                //       width: 150,
+                //       height: 150,
+                //       child: Image.asset('assets/images/petmoji_logo.png'),
+                //     ),
+                //   )
+                // ),
                 Positioned(
                   left: 20,
-                  top: 40,
-                  child: GestureDetector(
-                    onTap: () {
-                      Navigator.of(context).pushNamedAndRemoveUntil(
-                                          '/home',
-                                          (Route<dynamic> route) => false);
-                    }, 
-                    child: Container(
-                      width: 72,
-                      height: 28,
-                      child: Image.asset('assets/images/main_logo.png'),
-                    ),
-                  )
-                ),
-                Positioned(
-                  left: 20,
-                  top: 110,
+                  top: 120,
                   child: Text(
-                    '픽카',
+                    '펫모지',
                     style: TextStyle(
                             color: Color(0xFF1F222B),
                             fontSize: 28,
@@ -125,7 +125,7 @@ class _LoginPickarPageState extends State<LoginPickarPage> {
                 ),
                 Positioned(
                   left: 20,
-                  top: 145,
+                  top: 155,
                   child: Text(
                     '회원으로 로그인',
                     style: TextStyle(
@@ -339,7 +339,7 @@ class _LoginPickarPageState extends State<LoginPickarPage> {
                                 ),
                                 style: ElevatedButton.styleFrom(
                                     minimumSize: const Size.fromHeight(50),
-                                    backgroundColor: Color(0xff235DFF),
+                                    backgroundColor:Color(0xff64b9b2),
                                     shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(10)),
                                     elevation: 5,
@@ -355,9 +355,9 @@ class _LoginPickarPageState extends State<LoginPickarPage> {
                                           '/privacy',
                                           (Route<dynamic> route) => false);
                                     },
-                                    child: const Text('픽카가 처음이신가요?',
+                                    child: const Text('펫모지가 처음이신가요?',
                                         style: TextStyle(
-                                          color: Color(0xff235DFF),
+                                          color: Color(0xff64b9b2),
                                           fontSize: 16,
                                           fontFamily: 'Pretendard',
                                           fontWeight: FontWeight.w600

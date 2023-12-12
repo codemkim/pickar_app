@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:pickar_app/models/social_model.dart';
 import 'package:pickar_app/social/social_login.dart';
+import 'package:pickar_app/ui/pages/service_page.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class MainServicePage extends StatefulWidget {
@@ -52,13 +53,13 @@ class _MainServicePageState extends State<MainServicePage> {
         },
         child:
           Container(
-                    padding: EdgeInsets.only(right: 10),
-                    margin: EdgeInsets.only(bottom: 10, left: 0),
-                    width: 80,
-                    height: 40,
-                    child: Image.asset('assets/images/main_logo.png')
-                  ),
-          ),
+                        // // padding: EdgeInsets.only(right: ),
+                        // margin: EdgeInsets.only(bottom: 0, left: 0),
+                        width: 100,
+                        height: 100,
+                        child: Image.asset('assets/images/petmoji_logo.png', fit: BoxFit.cover,)
+                      ),
+            ),
       backgroundColor: Color(0xFFFEFEFE),
       actions: [
         IconButton(onPressed: () {}, icon: Icon(Icons.notifications)),
@@ -74,6 +75,26 @@ class _MainServicePageState extends State<MainServicePage> {
 
   @override
   Widget build(BuildContext context) {
+
+    Route _routePage(Widget targetPage) {
+      return PageRouteBuilder(
+        pageBuilder: (context, animation, secondaryAnimation) => targetPage,
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          var begin = Offset(1.0, 0.0);
+          var end = Offset.zero;
+          var curve = Curves.ease;
+
+          var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+          var offsetAnimation = animation.drive(tween);
+
+          return SlideTransition(
+            position: offsetAnimation,
+            child: child,
+          );
+        },
+      );
+    }
+
     return Scaffold(
       appBar: _appbarWidget(),
       body: GestureDetector(
@@ -112,13 +133,28 @@ class _MainServicePageState extends State<MainServicePage> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Container(
-                                width: (MediaQuery.of(context).size.width/2) - 25,
-                                decoration: BoxDecoration(
-                                  color:  Colors.indigoAccent,
-                                  borderRadius: BorderRadius.circular(7),
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.push(context, _routePage(ServicePage()));
+                                },
+                                child: Container(
+                                  width: (MediaQuery.of(context).size.width/2) - 25,
+                                  decoration: BoxDecoration(
+                                    color:  Colors.indigoAccent,
+                                    borderRadius: BorderRadius.circular(7),
+                                  
+                                  ),
+                                  child: Center(child:Text(
+                                    "이모지 만들기",
+                                    style: TextStyle(
+                                      fontSize: 20, // 글꼴 크기
+                                      fontWeight: FontWeight.bold, // 글꼴 두께
+                                      fontStyle: FontStyle.normal, // 글꼴 스타일 (이탤릭)
+                                      color: Colors.white,
+                                    )
+                                    )),
+                                
                                 ),
-
                               ),
                               Container(
                                 

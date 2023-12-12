@@ -1,7 +1,10 @@
 
+import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:kakao_map_plugin/kakao_map_plugin.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:loading_overlay/loading_overlay.dart';
 import 'package:pickar_app/models/social_model.dart';
 import 'package:pickar_app/social/social_login.dart';
 
@@ -14,96 +17,158 @@ class ServicePage extends StatefulWidget {
 class _ServicePageState extends State<ServicePage> {
 
   final socialModel = SocialModel(SocialLogin());
-  
-  late KakaoMapController mapController;
-  bool serviceEnabled = false;
-  Set<Marker> markers = {};
-  
-  @override
-  void initState(){
+  bool _isLoading = false;
+  XFile? _inputImage;
+
+  Future getImage() async {
     
-    Future.delayed(Duration.zero, () async {
-        // load shared preferences
-      LocationPermission permission;
-  // 위치 서비스 활성화 여부 확인
-      serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    setState(() {
+      _inputImage = null;
+      _isLoading = true;
+    });
+    final pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
 
-      print('serviceEnabled=====${serviceEnabled}');
-      if (!serviceEnabled) {
-        // 위치 서비스를 활성화하도록 요청
-        return Future.error('Location services are disabled.');
-      }
+    if (pickedFile != null) {
+      // 이미지 용량을 낮추기
+      XFile compressedFile = await compressImage(pickedFile.path, 50);
 
-      permission = await Geolocator.checkPermission();
-      if (permission == LocationPermission.denied) {
-        permission = await Geolocator.requestPermission();
-        if (permission == LocationPermission.denied) {
-          // 권한이 거부된 경우 처리
-          return Future.error('Location permissions are denied');
-        }
-      }
-      
-      if (permission == LocationPermission.deniedForever) {
-        // 권한이 영구적으로 거부된 경우 처리
-        return Future.error(
-            'Location permissions are permanently denied, we cannot request permissions.');
-      } 
+      setState(() {
+        _inputImage = compressedFile;
+        _isLoading = false;
+        
       });
-    
+    }
   }
+
+  Future<XFile> compressImage(String path, int quality) async {
+    final compressedImage = await FlutterImageCompress.compressAndGetFile(
+      path,
+      path.replaceFirst('.jpg', '_compressed.jpg'),
+      quality: quality,
+    );
+
+    return compressedImage!;
+  }
+
+  PreferredSizeWidget _appbarWidget() {
+    return AppBar(
+      actions: [
+        IconButton(onPressed: () {}, icon: Icon(Icons.notifications)),
+        IconButton(onPressed: () {}, icon: Icon(Icons.menu)),
+      ],
+    );
+  }
+  
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: 
-
-      Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          ElevatedButton(
-            onPressed: () async {
-              await socialModel.logout();
-              Navigator.of(context).pushNamedAndRemoveUntil('/home', (Route<dynamic> route) => false);
-            } 
-          
-          ,
-           child: Text('logout')),
-           SizedBox(
-            width: 300,
-            height: 300,
-            child: KakaoMap(
-              onMapCreated: ((controller) async {
-                mapController = controller;
-                Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.best);
-                await mapController.setCenter(LatLng(position.latitude, position.longitude));
-
-                markers.add(Marker(
-                  markerId: markers.length.toString(),
-                  latLng: await mapController.getCenter(),
-                  width: 30,
-                  height: 44,
-                  offsetX: 15,
-                  offsetY: 44,
-                  markerImageSrc:
-                'https://w7.pngwing.com/pngs/96/889/png-transparent-marker-map-interesting-places-the-location-on-the-map-the-location-of-the-thumbnail.png',
-                  ));
-
-                setState(() {});
-
-
-              }),
-              onMarkerTap: ((markerId, latLng, zoomLevel) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('marker click:\n\n$latLng')));
-              }),
-              markers: markers.toList(),
-              zoomControl: true,
-              zoomControlPosition: ControlPosition.right,
-              
-              
-            ),
-           )
-          ],
-          )
+    return Scaffold(
+      appBar: _appbarWidget(),
+      body: LoadingOverlay(
+        isLoading: _isLoading,
+        opacity: 0.5,
+        progressIndicator: LoadingAnimationWidget.staggeredDotsWave(
+              color: Color(0xff64b9b2), size: 50),
+        child: Container(
+          height: MediaQuery.of(context).size.height,
+          padding: EdgeInsets.only(left: 15, right: 15, top:15),
+          child: GestureDetector(
+              onTap: (){
+                FocusScope.of(context).unfocus();
+              },
+              child: 
+                Column(
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        getImage();
+        
+                      },
+                      child: Container(
+                        height: 300,
+                        decoration: 
+                          BoxDecoration(
+                            color: _inputImage == null
+                              ? Color(0xffE4EBF6)
+                              :Colors.transparent,
+                            
+                            borderRadius: BorderRadius.circular(7),
+                          ),
+                        child: Center(
+                          child: _inputImage == null
+                            ? Icon(Icons.add, size: 50,)
+                            : Image.file(
+                              File(_inputImage!.path),
+                              width: MediaQuery.of(context).size.width, 
+                              height: 300, 
+                              fit:BoxFit.fill)
+                            
+                          ),
+                              
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    Divider(
+                            color: Color(0xffD7DDED), // 구분선 색상 설정
+                            thickness: 1, // 구분선 두께 설정
+                            height: 5, // 구분선의 상하 여백 설정
+                          ),
+                    SizedBox(height: 10),
+                    SingleChildScrollView(
+                            child: Column(
+                              children: [
+                                Container(
+                                  height: 50,
+                                  decoration: BoxDecoration(
+                                    color: Color(0xffE4EBF6),
+                                    borderRadius: BorderRadius.circular(7),
+                                  ),
+                                ),
+                                SizedBox(height: 10),
+                                Container(
+                                  height: 150,
+                                  decoration: BoxDecoration(
+                                    color:  Color(0xffF2F4F5),
+                                    borderRadius: BorderRadius.circular(7),
+                                  ),
+                                  
+                                ),
+                                
+                              ],
+                          ),
+                      ),
+                      SizedBox(height: 10),
+                      Divider(
+                              color: Color(0xffD7DDED), // 구분선 색상 설정
+                              thickness: 1, // 구분선 두께 설정
+                              height: 5, // 구분선의 상하 여백 설정
+                            ),
+                      SizedBox(height: 10),
+                      ElevatedButton(
+                        onPressed: () {
+                          
+                        },
+                        child: Text(
+                          "이모지 만들기",
+                          style: TextStyle(
+                            fontSize: 17,
+                            color: Colors.white,
+                            fontWeight: FontWeight.normal,
+                          ),
+                        ),
+                        style: ElevatedButton.styleFrom(
+                            minimumSize: const Size.fromHeight(50),
+                            backgroundColor: Color(0xff64b9b2),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10)),
+                            elevation: 5,
+                            shadowColor: Colors.black),
+                      ),
+                  ],
+                ),
+              ),
+        ),
+      ),
     );
   }
 }
