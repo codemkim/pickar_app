@@ -1,10 +1,8 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:loading_overlay/loading_overlay.dart';
 import 'package:lottie/lottie.dart';
-import 'package:pickar_app/models/social_model.dart';
+import 'package:pickar_app/blocs/auth_bloc.dart';
 import 'package:pickar_app/social/social_login.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -16,8 +14,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-
-  final socialModel = SocialModel(SocialLogin());
+  
   SharedPreferences? prefs;
   bool _isLoading = false;
 
@@ -202,7 +199,7 @@ class _LoginPageState extends State<LoginPage> {
                             setState(() {
                               _isLoading = true;
                             });
-                            await socialModel.googleLogin();
+                            bool isLogined = await authBloc.doGoogleLogin('google');
                             setState(() {
                               _isLoading = false;
                             });
@@ -255,7 +252,7 @@ class _LoginPageState extends State<LoginPage> {
                             setState(() {
                               _isLoading = true;
                             });
-                            await socialModel.kakaoLogin();
+                            bool isLogined = await authBloc.doKakaoLogin('kakao');
                             setState(() {
                               _isLoading = false;
                             });

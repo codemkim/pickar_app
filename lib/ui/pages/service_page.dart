@@ -5,8 +5,6 @@ import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:loading_overlay/loading_overlay.dart';
-import 'package:pickar_app/models/social_model.dart';
-import 'package:pickar_app/social/social_login.dart';
 
 class ServicePage extends StatefulWidget {
 
@@ -15,8 +13,6 @@ class ServicePage extends StatefulWidget {
 }
 
 class _ServicePageState extends State<ServicePage> {
-
-  final socialModel = SocialModel(SocialLogin());
   bool _isLoading = false;
   XFile? _inputImage;
 
