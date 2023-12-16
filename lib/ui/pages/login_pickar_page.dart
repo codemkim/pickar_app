@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:loading_overlay/loading_overlay.dart';
+import 'package:pickar_app/blocs/auth_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPickarPage extends StatefulWidget {
@@ -302,32 +303,31 @@ class _LoginPickarPageState extends State<LoginPickarPage> {
                             child: Column(children: [
                               ElevatedButton(
                                 onPressed: () async{
-                                  
+                                  setState(() { _isLoading = true; });
+
+                                  Map<String, dynamic> payload = {
+                                    "username": emailTextController.text,
+                                    "password": pwTextController.text,
+                                  };
+
                                   if (_key.currentState!.validate()) {
-                                    setState(() {
-                                      _isLoading = true;
-                                    });
-                                    try {
-                                      
-                                      await FirebaseAuth.instance.signInWithEmailAndPassword(
-                                        email: emailTextController.text, password: pwTextController.text);
-                                        
+                                    
+                                    String errorMessage = await authBloc.doBaseLogin(payload);
+                                    setState(() { _isLoading = false; });
+                                
+                                    if (errorMessage == '로그인을 성공하셨습니다.' ) {
                                       prefs?.setString('useremail', emailTextController.text);
                                       Navigator.of(context).pushNamedAndRemoveUntil(
                                                 '/home',
                                                 (Route<dynamic> route) => false);
-                                    } on FirebaseAuthException catch (e) {
-                                      print(e.code);
-                                      if (e.code == 'invalid-credential') {
-                                        _showMessageDialog('이메일/비밀번호가 틀렸습니다.');
-                                      } else if (e.code == 'invalid-email') {
-                                        _showMessageDialog('이메일 양식을 확인해주세요.');
-                                      }
-                                    } 
+
+                                    } else {
+                                      _showMessageDialog(errorMessage);
+                                    }
+                                    
                                   } else {
                                     _showMessageDialog('이메일/비밀번호를 확인해주세요');
                                   }
-                                  
                                 },
                                 child: Text(
                                   "로그인",

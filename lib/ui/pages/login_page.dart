@@ -3,7 +3,6 @@ import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:loading_overlay/loading_overlay.dart';
 import 'package:lottie/lottie.dart';
 import 'package:pickar_app/blocs/auth_bloc.dart';
-import 'package:pickar_app/social/social_login.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 
@@ -14,7 +13,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  
+
   SharedPreferences? prefs;
   bool _isLoading = false;
 

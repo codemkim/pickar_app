@@ -22,6 +22,28 @@ class AuthProvider {
   dynamic user;
   String loginPlatform = 'none';
 
+  Future<String> doBaseLogin(dynamic data) async {
+    loginPlatform = 'base';
+    String errorMesage = '로그인을 성공하셨습니다.';
+    try {
+      await FirebaseAuth.instance.signInWithEmailAndPassword(email: data['username'], password: data['password']);
+      return errorMesage;
+
+    } on FirebaseAuthException catch (e) {
+      print(e.code);
+      if (e.code == 'invalid-credential') {
+        errorMesage = '이메일/비밀번호가 틀렸습니다.';
+      } else if (e.code == 'invalid-email') {
+        errorMesage = '이메일 양식을 확인해주세요.';
+      } else if (e.code == 'too-many-requests') {
+        errorMesage = '과한 로그인 시도로 인한 에러';
+      } else {
+        errorMesage = '서버에러 발생, 관리자 문의';
+      }
+      return errorMesage;
+    }
+  }
+
   // 카카오 로그인 
   Future<bool> doKakaoLogin(dynamic data) async {
     loginPlatform = data;
@@ -47,6 +69,7 @@ class AuthProvider {
     }
   }
 
+  // 구글 로그인 
   Future<bool> doGoogleLogin(dynamic data) async {
     loginPlatform = data;
     try {
@@ -68,6 +91,7 @@ class AuthProvider {
     }
   }
 
+  // 로그아웃 
   Future<bool> logout() async {
     print(this.loginPlatform);
     try {
@@ -80,6 +104,9 @@ class AuthProvider {
           await _socialLogin.kakaoLogout();
           print('kakao logout complete');
           break;
+        case 'base':
+          print('base logout');
+          break;
         case 'none':
           print('none logout');
           break;
@@ -89,13 +116,17 @@ class AuthProvider {
 
       isLogined = false;
       user = null;
+      loginPlatform = 'none';
       return true;
 
     } on Exception catch (e) {
-
+      isLogined = false;
+      user = null;
+      loginPlatform = 'none';
+      
       print('e : ${e}');
       return false;
-      
+
     }
   }
 
