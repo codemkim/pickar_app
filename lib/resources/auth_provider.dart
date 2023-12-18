@@ -44,6 +44,28 @@ class AuthProvider {
     }
   }
 
+  Future<String> doRegister(dynamic data) async {
+    loginPlatform = 'base';
+    String errorMesage = '회원가입에 성공하셨습니다.';
+    try {
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(email: data['username'], password: data['password']);
+      return errorMesage;
+
+    } on FirebaseAuthException catch (e) {
+      print('register error : ${e.code}');
+      if (e.code == 'weak-password') {
+        errorMesage = '비밀번호가 너무 짧습니다.';
+      } else if (e.code == 'email-already-in-use') {
+        errorMesage = '해당 이메일을 이미 사용중입니다.';
+      } else if (e.code == 'invalid-email') {
+        errorMesage = '이메일 양식을 확인해주세요.';
+      } else {
+        errorMesage = '서버에러 발생, 관리자 문의';
+      }
+      return errorMesage;
+    }
+  }
+
   // 카카오 로그인 
   Future<bool> doKakaoLogin(dynamic data) async {
     loginPlatform = data;

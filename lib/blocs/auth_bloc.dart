@@ -9,6 +9,10 @@ class AuthBloc {
     return await _repository.doBaseLogin(data);
   } 
 
+  Future<String> doRegister(dynamic data) async {
+    return await _repository.doRegister(data);
+  }
+
   Future<bool> doKakaoLogin(dynamic data) async {
     return await _repository.doKakaoLogin(data);
   }
@@ -20,9 +24,7 @@ class AuthBloc {
   Future<bool> logout() async {
     return await _repository.logout();
   }
-  // Future<bool> doRegister(dynamic data) async {
-  //   return await _repository.doRegister(data);
-  // }
+  
 
   dispose() {}
 }
