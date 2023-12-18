@@ -5,6 +5,7 @@ import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:loading_overlay/loading_overlay.dart';
+import 'package:pickar_app/blocs/image_processing_bloc.dart';
 
 class ServicePage extends StatefulWidget {
 
@@ -44,6 +45,41 @@ class _ServicePageState extends State<ServicePage> {
     );
 
     return compressedImage!;
+  }
+
+  void _showMessageDialog(String message) {
+    setState(() {
+      _isLoading = false;
+    });
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Row(
+          children: <Widget>[
+            Container(
+              width: 5,
+              height: 5,
+              decoration: BoxDecoration(
+                color: Colors.red,
+                shape: BoxShape.circle, // 원형 모양
+              ),
+            ),
+            SizedBox(width: 10), // 점과 텍스트 사이의 간격
+            Expanded(
+              child: Text(
+                message,
+                style: TextStyle(color: Colors.white, fontSize: 16, fontFamily: 'Pretendard'),
+              ),
+            ),
+          ],
+        ),
+        duration: Duration(seconds: 1), // 1초 후에 사라짐
+        behavior: SnackBarBehavior.floating, // 'floating'으로 설정하여 하단에서 떠오름
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12), // 모서리 둥글게
+        ),
+        margin: EdgeInsets.only(left: 20, right: 20, bottom: 10, top:20), // 하단에 10만큼의 마진을 줌
+      ),
+    );
   }
 
   PreferredSizeWidget _appbarWidget() {
@@ -141,8 +177,13 @@ class _ServicePageState extends State<ServicePage> {
                             ),
                       SizedBox(height: 10),
                       ElevatedButton(
-                        onPressed: () {
-                          
+                        onPressed: () async{
+                          if (_inputImage?.path != null ) {
+                            String convertedImage = await imageProcessingBloc.getImageCaption(_inputImage!.path);
+                            print(convertedImage);
+                          } else {
+                            _showMessageDialog('이미지를 선택해주세요!');
+                          }
                         },
                         child: Text(
                           "이모지 만들기",

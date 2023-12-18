@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:pickar_app/resources/auth_provider.dart';
+import 'package:pickar_app/resources/image_processing_provider.dart';
 
 class AuthRepository {
   final authProvider = AuthProvider();
@@ -14,7 +15,14 @@ class AuthRepository {
 
   Future<bool> logout() => authProvider.logout();
 
-  
+}
+
+class ImageProcessingRepository {
+  final imageProcessingProvider = ImageProcessingProvider();
+
+  Future<String> getImageCaption(String data) => imageProcessingProvider.getImageCaption(data);
+
+  Future<String> createConversionImage(dynamic data) => imageProcessingProvider.createConversionImage(data);
 
 }
 

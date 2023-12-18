@@ -15,6 +15,7 @@ class MainServicePage extends StatefulWidget {
 class _MainServicePageState extends State<MainServicePage> {
 
   final PageController _pageController = PageController();
+  bool _isPageEvent = false;
   Timer? _timer;
 
   @override
@@ -50,14 +51,8 @@ class _MainServicePageState extends State<MainServicePage> {
           FocusScope.of(context).unfocus();
         },
         child:
-          Container(
-                        // // padding: EdgeInsets.only(right: ),
-                        // margin: EdgeInsets.only(bottom: 0, left: 0),
-                        width: 100,
-                        height: 100,
-                        child: Image.asset('assets/images/petmoji_logo.png', fit: BoxFit.cover,)
-                      ),
-            ),
+          Container( width: 100, height: 100, child: Image.asset('assets/images/petmoji_logo.png', fit: BoxFit.cover,)),
+        ),
       backgroundColor: Color(0xFFFEFEFE),
       actions: [
         IconButton(onPressed: () {}, icon: Icon(Icons.notifications)),
@@ -98,6 +93,11 @@ class _MainServicePageState extends State<MainServicePage> {
       body: GestureDetector(
           onTap: (){
             FocusScope.of(context).unfocus();
+            // 
+            if (_isPageEvent) {
+              _startAutoScroll();
+              _isPageEvent = true;
+            }
           },
           child: 
             SingleChildScrollView(
@@ -171,77 +171,83 @@ class _MainServicePageState extends State<MainServicePage> {
                           height: 70,
 
                           color:Colors.transparent,
-                          child: PageView(
-                            controller: _pageController,
+                          child: GestureDetector(
+                            onTap: () {
+                                _stopAutoScroll();
+                                _isPageEvent = true;
+                                // 여기에 Content 1이 클릭되었을 때의 로직을 추가하세요.
+                              },
+                            child: PageView(
+                              controller: _pageController, 
+                              children: [
+                                Container(
+                                  height: 40,
+                                  margin: EdgeInsets.symmetric(horizontal: 8), // 카드 사이의 간격
+                                  decoration: BoxDecoration(
+                                    color: Color(0xffF2F4F5),
+                                    borderRadius: BorderRadius.circular(8), // 둥근 모서리
+                                  ),
+                                  child: Center(
+                                    child: Text('content1'),
+                                  ),
+                                ),
+                                Container(
+                                  height: 40,
+                                  margin: EdgeInsets.symmetric(horizontal: 8), // 카드 사이의 간격
+                                  decoration: BoxDecoration(
+                                    color: Color(0xffF2F4F5),
+                                    borderRadius: BorderRadius.circular(8), // 둥근 모서리
+                                  ),
+                                  child: Center(
+                                    child: Text('content2'),
+                                  ),
+                                ),
+                                Container(
+                                  height: 40,
+                                  margin: EdgeInsets.symmetric(horizontal: 8), // 카드 사이의 간격
+                                  decoration: BoxDecoration(
+                                    color: Color(0xffF2F4F5),
+                                    borderRadius: BorderRadius.circular(8), // 둥근 모서리
+                                  ),
+                                  child: Center(
+                                    child: Text('content3'),
+                                  ),
+                                ),
+                                Container(
+                                  height: 40,
+                                  margin: EdgeInsets.symmetric(horizontal: 8), // 카드 사이의 간격
+                                  decoration: BoxDecoration(
+                                    color: Color(0xffF2F4F5),
+                                    borderRadius: BorderRadius.circular(8), // 둥근 모서리
+                                  ),
+                                  child: Center(
+                                    child: Text('content3'),
+                                  ),
+                                ),
+                                Container(
                             
-                            children: [
-                              Container(
-                                height: 40,
-                                margin: EdgeInsets.symmetric(horizontal: 8), // 카드 사이의 간격
-                                decoration: BoxDecoration(
-                                  color: Color(0xffF2F4F5),
-                                  borderRadius: BorderRadius.circular(8), // 둥근 모서리
+                                  height: 40,
+                                  margin: EdgeInsets.symmetric(horizontal: 8), // 카드 사이의 간격
+                                  decoration: BoxDecoration(
+                                    color: Color(0xffF2F4F5),
+                                    borderRadius: BorderRadius.circular(8), // 둥근 모서리
+                                  ),
+                                  child: Center(
+                                    child: Text('content4'),
+                                  ),
                                 ),
-                                child: Center(
-                                  child: Text('content1'),
+                                Container(
+                                  height: 40,
+                                  decoration: BoxDecoration(
+                                    color: Color(0xffF2F4F5),
+                                    borderRadius: BorderRadius.circular(8), // 둥근 모서리
+                                  ),
+                                  child: Center(
+                                    child: Text('content5'),
+                                  ),
                                 ),
-                              ),
-                              Container(
-                                height: 40,
-                                margin: EdgeInsets.symmetric(horizontal: 8), // 카드 사이의 간격
-                                decoration: BoxDecoration(
-                                  color: Color(0xffF2F4F5),
-                                  borderRadius: BorderRadius.circular(8), // 둥근 모서리
-                                ),
-                                child: Center(
-                                  child: Text('content2'),
-                                ),
-                              ),
-                              Container(
-                                height: 40,
-                                margin: EdgeInsets.symmetric(horizontal: 8), // 카드 사이의 간격
-                                decoration: BoxDecoration(
-                                  color: Color(0xffF2F4F5),
-                                  borderRadius: BorderRadius.circular(8), // 둥근 모서리
-                                ),
-                                child: Center(
-                                  child: Text('content3'),
-                                ),
-                              ),
-                              Container(
-                                height: 40,
-                                margin: EdgeInsets.symmetric(horizontal: 8), // 카드 사이의 간격
-                                decoration: BoxDecoration(
-                                  color: Color(0xffF2F4F5),
-                                  borderRadius: BorderRadius.circular(8), // 둥근 모서리
-                                ),
-                                child: Center(
-                                  child: Text('content3'),
-                                ),
-                              ),
-                              Container(
-
-                                height: 40,
-                                margin: EdgeInsets.symmetric(horizontal: 8), // 카드 사이의 간격
-                                decoration: BoxDecoration(
-                                  color: Color(0xffF2F4F5),
-                                  borderRadius: BorderRadius.circular(8), // 둥근 모서리
-                                ),
-                                child: Center(
-                                  child: Text('content4'),
-                                ),
-                              ),
-                              Container(
-                                height: 40,
-                                decoration: BoxDecoration(
-                                  color: Color(0xffF2F4F5),
-                                  borderRadius: BorderRadius.circular(8), // 둥근 모서리
-                                ),
-                                child: Center(
-                                  child: Text('content5'),
-                                ),
-                              ),
-                            ]
+                              ]
+                            ),
                           ),
                         ),
                         SizedBox(height: 8), // 인디케이터와 카드 사이의 간격

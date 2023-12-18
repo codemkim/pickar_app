@@ -1,28 +1,26 @@
-
-
 import 'package:pickar_app/resources/repositories.dart';
 
 class AuthBloc {
-  final _repository = AuthRepository();
+  final _authRepository = AuthRepository();
 
   Future<String> doBaseLogin(dynamic data) async {
-    return await _repository.doBaseLogin(data);
+    return await _authRepository.doBaseLogin(data);
   } 
 
   Future<String> doRegister(dynamic data) async {
-    return await _repository.doRegister(data);
+    return await _authRepository.doRegister(data);
   }
 
   Future<bool> doKakaoLogin(dynamic data) async {
-    return await _repository.doKakaoLogin(data);
+    return await _authRepository.doKakaoLogin(data);
   }
 
   Future<bool> doGoogleLogin(dynamic data) async {
-    return await _repository.doGoogleLogin(data);
+    return await _authRepository.doGoogleLogin(data);
   }
 
   Future<bool> logout() async {
-    return await _repository.logout();
+    return await _authRepository.logout();
   }
   
 
