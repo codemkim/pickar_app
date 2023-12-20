@@ -1,9 +1,9 @@
 
+import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:kakao_map_plugin/kakao_map_plugin.dart';
-import 'package:pickar_app/models/social_model.dart';
-import 'package:pickar_app/social/social_login.dart';
+import 'package:flutter_naver_map/flutter_naver_map.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:loading_overlay/loading_overlay.dart';
 
 class ServicePage extends StatefulWidget {
 
@@ -12,98 +12,69 @@ class ServicePage extends StatefulWidget {
 }
 
 class _ServicePageState extends State<ServicePage> {
+  bool _isLoading = false;
 
-  final socialModel = SocialModel(SocialLogin());
-  
-  late KakaoMapController mapController;
-  bool serviceEnabled = false;
-  Set<Marker> markers = {};
-  
-  @override
-  void initState(){
-    
-    Future.delayed(Duration.zero, () async {
-        // load shared preferences
-      LocationPermission permission;
-  // 위치 서비스 활성화 여부 확인
-      serviceEnabled = await Geolocator.isLocationServiceEnabled();
-
-      print('serviceEnabled=====${serviceEnabled}');
-      if (!serviceEnabled) {
-        // 위치 서비스를 활성화하도록 요청
-        return Future.error('Location services are disabled.');
-      }
-
-      permission = await Geolocator.checkPermission();
-      if (permission == LocationPermission.denied) {
-        permission = await Geolocator.requestPermission();
-        if (permission == LocationPermission.denied) {
-          // 권한이 거부된 경우 처리
-          return Future.error('Location permissions are denied');
-        }
-      }
-      
-      if (permission == LocationPermission.deniedForever) {
-        // 권한이 영구적으로 거부된 경우 처리
-        return Future.error(
-            'Location permissions are permanently denied, we cannot request permissions.');
-      } 
-      });
-    
+  void _showMessageDialog(String message) {
+    setState(() {
+      _isLoading = false;
+    });
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Row(
+          children: <Widget>[
+            Container(
+              width: 5,
+              height: 5,
+              decoration: BoxDecoration(
+                color: Colors.red,
+                shape: BoxShape.circle, // 원형 모양
+              ),
+            ),
+            SizedBox(width: 10), // 점과 텍스트 사이의 간격
+            Expanded(
+              child: Text(
+                message,
+                style: TextStyle(color: Colors.white, fontSize: 16, fontFamily: 'Pretendard'),
+              ),
+            ),
+          ],
+        ),
+        duration: Duration(seconds: 1), // 1초 후에 사라짐
+        behavior: SnackBarBehavior.floating, // 'floating'으로 설정하여 하단에서 떠오름
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12), // 모서리 둥글게
+        ),
+        margin: EdgeInsets.only(left: 20, right: 20, bottom: 10, top:20), // 하단에 10만큼의 마진을 줌
+      ),
+    );
   }
+
+  PreferredSizeWidget _appbarWidget() {
+    return AppBar(
+      actions: [
+        IconButton(onPressed: () {}, icon: Icon(Icons.notifications)),
+        IconButton(onPressed: () {}, icon: Icon(Icons.menu)),
+      ],
+    );
+  }
+  
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: 
-
-      Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          ElevatedButton(
-            onPressed: () async {
-              await socialModel.logout();
-              Navigator.of(context).pushNamedAndRemoveUntil('/home', (Route<dynamic> route) => false);
-            } 
-          
-          ,
-           child: Text('logout')),
-           SizedBox(
-            width: 300,
-            height: 300,
-            child: KakaoMap(
-              onMapCreated: ((controller) async {
-                mapController = controller;
-                Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.best);
-                await mapController.setCenter(LatLng(position.latitude, position.longitude));
-
-                markers.add(Marker(
-                  markerId: markers.length.toString(),
-                  latLng: await mapController.getCenter(),
-                  width: 30,
-                  height: 44,
-                  offsetX: 15,
-                  offsetY: 44,
-                  markerImageSrc:
-                'https://w7.pngwing.com/pngs/96/889/png-transparent-marker-map-interesting-places-the-location-on-the-map-the-location-of-the-thumbnail.png',
-                  ));
-
-                setState(() {});
-
-
-              }),
-              onMarkerTap: ((markerId, latLng, zoomLevel) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('marker click:\n\n$latLng')));
-              }),
-              markers: markers.toList(),
-              zoomControl: true,
-              zoomControlPosition: ControlPosition.right,
-              
-              
-            ),
-           )
-          ],
-          )
+    return Scaffold(
+      appBar: _appbarWidget(),
+      body: LoadingOverlay(
+        isLoading: _isLoading,
+        opacity: 0.5,
+        progressIndicator: LoadingAnimationWidget.staggeredDotsWave(
+              color: Color(0xff64b9b2), size: 50),
+        child: NaverMap(
+          options: const NaverMapViewOptions(),
+          onMapReady: (controller) {
+            print("네이버 맵 로딩됨!");
+          },
+        )
+      ),
     );
   }
 }

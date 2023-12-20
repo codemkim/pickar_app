@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:loading_overlay/loading_overlay.dart';
+import 'package:pickar_app/blocs/auth_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -401,37 +402,32 @@ class _RegisterPageState extends State<RegisterPage> {
                             SizedBox(height: 30),
                             ElevatedButton(
                                         onPressed: () async{
+                                          setState(() { _isLoading = true; });
+
+                                          Map<String, dynamic> payload = {
+                                            "username": emailTextController.text,
+                                            "password": pwTextController.text,
+                                          };
+
                                           if (_key.currentState!.validate()) {
-                                            setState(() {
-                                              _isLoading = true;
-                                            });
-                                            try {
-                                              
-                                              await FirebaseAuth.instance.createUserWithEmailAndPassword(
-                                                email: emailTextController.text, password: pwTextController.text);
-                                                
-                                              prefs?.setString('useremail', emailTextController.text);
+                                            
+                                            String errorMessage = await authBloc.doRegister(payload);
+                                            setState(() { _isLoading = false; });
+                                        
+                                            if (errorMessage == '회원가입에 성공하셨습니다.' ) {
+                                              await prefs?.setString('useremail', emailTextController.text);
+                                              _showMessageDialog(errorMessage);
                                               Navigator.of(context).pushNamedAndRemoveUntil(
                                                         '/home',
                                                         (Route<dynamic> route) => false);
-                                            } on FirebaseAuthException catch (e) {
-                                              print(e.code);
-                                              if (e.code == 'weak-password') {
-                                                _showMessageDialog('비밀번호가 너무 짧습니다.');
-                                              } else if (e.code == 'email-already-in-use') {
-                                                _showMessageDialog('해당 이메일을 이미 사용중입니다.');
-                                              } else if (e.code == 'invalid-email') {
-                                                _showMessageDialog('이메일 양식을 확인해주세요.');
-                                              }
-              
+
+                                            } else {
+                                              _showMessageDialog(errorMessage);
                                             }
               
                                           } else {
                                             _showMessageDialog('빈칸을 모두 채워주세요!');
                                           }
-                                        
-                                        
-                                          
                                         },
                                         child: Text(
                                           "회원가입",

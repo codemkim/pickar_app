@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_naver_map/flutter_naver_map.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk_user.dart' as kakao;
-import 'package:kakao_map_plugin/kakao_map_plugin.dart';
 import 'package:pickar_app/ui/pages/home_page.dart';
 import 'package:pickar_app/ui/pages/main_service_page.dart';
 import 'package:pickar_app/ui/pages/service_page.dart';
@@ -13,10 +14,19 @@ import 'ui/pages/privacy_page.dart';
 import 'ui/pages/register_page.dart';
 
 void main() async {
+
+  await dotenv.load(fileName: ".env");
   WidgetsFlutterBinding.ensureInitialized();
-  kakao.KakaoSdk.init(nativeAppKey: 'e5583bd8c079daebb72d7d57007521bf');
-  AuthRepository.initialize(appKey: '747028e635adf3aa5119c1d096c5323a');
+
+  kakao.KakaoSdk.init(nativeAppKey: dotenv.env['KAKAO_SDK_API_KEY']);
+  await NaverMapSdk.instance.initialize(
+    clientId: dotenv.env['NAVER_MAP_CLIENT_ID'],
+    onAuthFailed: (ex) {
+        print("********* 네이버맵 인증오류 : $ex *********");
+      });
+
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  
   runApp(const Pickar());
 }
 
