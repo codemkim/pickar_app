@@ -86,30 +86,30 @@ class _PrivacyPageState extends State<PrivacyPage> {
             
         child: Stack(
           children: [
-            // Positioned(
-            //   left: 0,
-            //   top: 0,
-            //   child: GestureDetector(
-            //     onTap: () {
-            //       Navigator.of(context).pushNamedAndRemoveUntil(
-            //                           '/home',
-            //                           (Route<dynamic> route) => false);
-            //     }, 
-            //     child: Container(
-            //       width: 150,
-            //       height: 150,
-            //       child: Image.asset('assets/images/petmoji_logo.png'),
-            //     ),
-            //   )
-            // ),
+            Positioned(
+              left: 20,
+              top: 40,
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.of(context).pushNamedAndRemoveUntil(
+                                      '/home',
+                                      (Route<dynamic> route) => false);
+                }, 
+                child: Container(
+                  width: 72,
+                  height: 28,
+                  child: Image.asset('assets/images/main_logo.png'),
+                ),
+              )
+            ),
             Positioned(
               left: 24,
-              top: 120,
+              top: 110,
               child: Text.rich(
                 TextSpan(
                   children: [
                     TextSpan(
-                      text: '펫모지',
+                      text: '픽카',
                       style: TextStyle(
                         color: Color(0xFF1F222B),
                         fontSize: 28,
@@ -135,9 +135,9 @@ class _PrivacyPageState extends State<PrivacyPage> {
             ),
             Positioned(
               left: 24,
-              top: 160,
+              top: 150,
               child: Text(
-                '정상적인 펫모지서비스 이용을 위해',
+                '정상적인 픽카서비스 이용을 위해',
                 style: TextStyle(
                   color: Color(0xFF747A8B),
                   fontSize: 17,
@@ -150,7 +150,7 @@ class _PrivacyPageState extends State<PrivacyPage> {
             ),
             Positioned(
               left: 24,
-              top: 200,
+              top: 190,
               child: Text(
                 '아래 약관에 모두 동의해주세요',
                 style: TextStyle(
@@ -179,7 +179,7 @@ class _PrivacyPageState extends State<PrivacyPage> {
                               )),
                             value: isAllChecked,
                             onChanged: _handleAllChecked,
-                            activeColor: Color(0xff64b9b2),
+                            activeColor: Colors.blue,
                           ),
                           Divider(
                             color: Color(0xffD7DDED), // 구분선 색상 설정
@@ -194,7 +194,7 @@ class _PrivacyPageState extends State<PrivacyPage> {
                               color: Color(0xFF1F222B),
                               )),
                             value: isItem1Checked,
-                            activeColor: Color(0xff64b9b2),
+                            activeColor: Colors.blue,
                             onChanged: (bool? value) {
                               _handleItemChanged(value, 1);
                             },
@@ -209,7 +209,7 @@ class _PrivacyPageState extends State<PrivacyPage> {
                               )),
                             
                             value: isItem2Checked,
-                            activeColor: Color(0xff64b9b2),
+                            activeColor: Colors.blue,
                             onChanged: (bool? value) {
                               _handleItemChanged(value, 2);
                             },
@@ -238,7 +238,7 @@ class _PrivacyPageState extends State<PrivacyPage> {
                             ),
                             style: ElevatedButton.styleFrom(
                                 minimumSize: const Size.fromHeight(50),
-                                backgroundColor: Color(0xff64b9b2),
+                                backgroundColor: Color(0xff235DFF),
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(10)),
                                 elevation: 5,

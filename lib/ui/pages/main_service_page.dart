@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:pickar_app/blocs/auth_bloc.dart';
 import 'package:pickar_app/social/social_login.dart';
 import 'package:pickar_app/ui/pages/service_page.dart';
@@ -46,22 +47,16 @@ class _MainServicePageState extends State<MainServicePage> {
 
   PreferredSizeWidget _appbarWidget() {
     return AppBar(
-      title: GestureDetector(
-        onTap: () {
-          FocusScope.of(context).unfocus();
-        },
-        child:
-          Container( width: 100, height: 100, child: Image.asset('assets/images/petmoji_logo.png', fit: BoxFit.cover,)),
-        ),
+      title: IconButton(onPressed: () {}, icon: Icon(Icons.menu, size: 30,)),
       backgroundColor: Color(0xFFFEFEFE),
       actions: [
-        IconButton(onPressed: () {}, icon: Icon(Icons.notifications)),
+        IconButton(onPressed: () {}, icon: Icon(Icons.notifications_none, size: 30,)),
         IconButton(onPressed: () async{
 
           await authBloc.logout();
 
-        }, icon: Icon(Icons.logout)),
-        IconButton(onPressed: () {}, icon: Icon(Icons.menu)),
+        }, icon: Icon(Icons.logout,)),
+        
       ],
     );
   }
@@ -136,32 +131,74 @@ class _MainServicePageState extends State<MainServicePage> {
                                   Navigator.push(context, _routePage(ServicePage()));
                                 },
                                 child: Container(
+                                  
                                   width: (MediaQuery.of(context).size.width/2) - 25,
                                   decoration: BoxDecoration(
-                                    color:  Colors.indigoAccent,
+                                    color:  Color(0xFFF0F8FF),
                                     borderRadius: BorderRadius.circular(7),
+                                    // border: Border.all(color: Colors.black, width: 1)
                                   
                                   ),
-                                  child: Center(child:Text(
-                                    "이모지 만들기",
-                                    style: TextStyle(
-                                      fontSize: 20, // 글꼴 크기
-                                      fontWeight: FontWeight.bold, // 글꼴 두께
-                                      fontStyle: FontStyle.normal, // 글꼴 스타일 (이탤릭)
-                                      color: Colors.white,
-                                    )
-                                    )),
+                                  child: Stack(
+                                    children: [
+                                      Positioned(
+                                        top: 0,
+                                        left: 10,
+                                        child: Lottie.asset('assets/animations/pick_1_park.json',width: 150, height: 150)
+                                        ),
+                                      Positioned(
+                                        bottom: 17,
+                                        left: 30,
+                                        child: Column(
+                                          children: [
+                                            Text(
+                                              '주차구역 확인하고',
+                                              style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.black),
+                                            ),
+                                            Text(
+                                              '공유 하기',
+                                              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),
+                                            )
+                                        ],)
+                                      ),
+                                    ],
+                                  ),
                                 
                                 ),
                               ),
-                              Container(
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.push(context, _routePage(ServicePage()));
+                                },
+                                child: Container(
+                                  width: (MediaQuery.of(context).size.width/2) - 25,
+                                  decoration: BoxDecoration(
+                                    color:  Color(0xff162d4c),
+                                    borderRadius: BorderRadius.circular(7),
+                                  ),
+                                  child: Stack(
+                                      children: [
+                                        Lottie.asset('assets/animations/find_park.json'),
+                                        Positioned(
+                                          bottom: 20,
+                                          left: 25,
+                                          child: Column(
+                                            children: [
+                                              Text(
+                                                '내주변 가장 가까운 ',
+                                                style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.white),
+                                              ),
+                                              Text(
+                                                '주차 공간',
+                                                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
+                                              )
+                                          ],)
+                                        ),
+                                      ],
+                                    ),
+                                  
                                 
-                                width: (MediaQuery.of(context).size.width/2) - 25,
-                                decoration: BoxDecoration(
-                                  color:  Colors.lightBlueAccent,
-                                  borderRadius: BorderRadius.circular(7),
                                 ),
-
                               ),
                             ],
                           ),

@@ -66,7 +66,7 @@ class _RegisterPageState extends State<RegisterPage> {
       isLoading: _isLoading,
       opacity: 0.5,
       progressIndicator: LoadingAnimationWidget.staggeredDotsWave(
-            color: Color(0xff64b9b2), size: 50),
+            color: Colors.blue, size: 50),
       child: Scaffold(
         body: GestureDetector(
           onTap: (){
@@ -88,24 +88,24 @@ class _RegisterPageState extends State<RegisterPage> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,  // 이 부분 추가
                       children: [
-                              // GestureDetector(
-                              //   onTap: () {
-                              //      Navigator.of(context).pushNamedAndRemoveUntil(
-                              //               '/home',
-                              //               (Route<dynamic> route) => false);
-                              //   }, 
-                              //   child: Container(
-                              //     width: 72,
-                              //     height: 28,
-                              //     child: Image.asset('assets/images/main_logo.png'),
-                              //   ),
-                              // ),
+                              GestureDetector(
+                                onTap: () {
+                                   Navigator.of(context).pushNamedAndRemoveUntil(
+                                            '/home',
+                                            (Route<dynamic> route) => false);
+                                }, 
+                                child: Container(
+                                  width: 72,
+                                  height: 28,
+                                  child: Image.asset('assets/images/main_logo.png'),
+                                ),
+                              ),
                               SizedBox(height: 40),
                               Text.rich(
                                 TextSpan(
                                   children: [
                                     TextSpan(
-                                      text: '펫모지',
+                                      text: '픽카',
                                       style: TextStyle(
                                         color: Color(0xFF1F222B),
                                         fontSize: 28,
@@ -424,7 +424,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                             } else {
                                               _showMessageDialog(errorMessage);
                                             }
-                                            
+              
                                           } else {
                                             _showMessageDialog('빈칸을 모두 채워주세요!');
                                           }
@@ -439,7 +439,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                         ),
                                         style: ElevatedButton.styleFrom(
                                             minimumSize: const Size.fromHeight(50),
-                                            backgroundColor: Color(0xff64b9b2),
+                                            backgroundColor: Color(0xff235DFF),
                                             shape: RoundedRectangleBorder(
                                                 borderRadius: BorderRadius.circular(10)),
                                             elevation: 5,

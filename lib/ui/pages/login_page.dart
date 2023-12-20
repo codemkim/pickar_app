@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:loading_overlay/loading_overlay.dart';
-import 'package:lottie/lottie.dart';
-import 'package:pickar_app/blocs/auth_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:pickar_app/blocs/auth_bloc.dart';
 
 
 class LoginPage extends StatefulWidget {
@@ -23,7 +22,7 @@ class _LoginPageState extends State<LoginPage> {
       isLoading: _isLoading,
       opacity: 0.5,
       progressIndicator: LoadingAnimationWidget.staggeredDotsWave(
-            color: Color(0xff64b9b2), size: 50),
+            color: Colors.blue, size: 50),
       child: Scaffold(
         body: GestureDetector(
           onTap: (){
@@ -32,24 +31,33 @@ class _LoginPageState extends State<LoginPage> {
           child: Stack(
                 children: [
                   Positioned(
-                    left: 0,
-                    top: 0,
+                    left: 24,
+                    top: 40,
                     child: Container(
-                      width: 150,
-                      height: 150,
-                      child: Image.asset('assets/images/petmoji_logo.png'),
+                      width: 72,
+                      height: 28,
+                      child: Image.asset('assets/images/main_logo.png'),
+                    ),
+                  ),
+                  Positioned(
+                    left: 165,
+                    top: 151,
+                    child: Container(
+                      width: 28,
+                      height: 45.07,
+                      child: Image.asset('assets/images/logo_small.png'),
                     ),
                   ),
                   Positioned(
                     left: 24,
-                    top: 110,
+                    top: 100,
                     child: Text.rich(
                       TextSpan(
                         children: [
                           TextSpan(
-                            text: '반려동물',
+                            text: '주차 공간',
                             style: TextStyle(
-                              color: Color(0xff64b9b2),
+                              color: Color(0xFF235DFF),
                               fontSize: 36,
                               fontFamily: 'Pretendard',
                               fontWeight: FontWeight.w700,
@@ -74,14 +82,14 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   Positioned(
                     left: 24,
-                    top: 155,
+                    top: 145,
                     child: Text.rich(
                       TextSpan(
                         children: [
                           TextSpan(
-                            text: '사랑 ',
+                            text: '공유 ',
                             style: TextStyle(
-                              color: Color(0xff64b9b2),
+                              color: Color(0xFF235DFF),
                               fontSize: 36,
                               fontFamily: 'Pretendard',
                               fontWeight: FontWeight.w700,
@@ -106,9 +114,9 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   Positioned(
                     left: 24,
-                    top: 200,
+                    top: 190,
                     child: Text(
-                      '새로운 문화',
+                      '새로운 방법',
                       style: TextStyle(
                         color: Color(0xFF1E212A),
                         fontSize: 36,
@@ -121,9 +129,9 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   Positioned(
                     left: 24,
-                    top: 285,
+                    top: 275,
                     child: Text(
-                      '반려인을 위한',
+                      '모두를 위한',
                       style: TextStyle(
                               color: Color(0xFF737A8B),
                               fontSize: 17,
@@ -136,23 +144,12 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   Positioned(
                     left: 24,
-                    top: 310,
+                    top: 300,
                     child: Text.rich(
                       TextSpan(
                         children: [
                           TextSpan(
-                            text: '나만의 ',
-                            style: TextStyle(
-                              color: Color(0xFF737A8B),
-                              fontSize: 17,
-                              fontFamily: 'Pretendard',
-                              fontWeight: FontWeight.w300,
-                              height: 0.08,
-                              letterSpacing: -0.51,
-                            ),
-                          ),
-                          TextSpan(
-                            text: '이모지, ',
+                            text: '주차 리워드',
                             style: TextStyle(
                               color: Color(0xFF737A8B),
                               fontSize: 17,
@@ -163,7 +160,7 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                           ),
                           TextSpan(
-                            text: '펫모지',
+                            text: ' 플랫폼, 픽카',
                             style: TextStyle(
                               color: Color(0xFF737A8B),
                               fontSize: 17,
@@ -178,19 +175,19 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                   Positioned(
-                    right: -62,
+                    right: 0,
                     top: 200,
-                    child: Lottie.asset('assets/animations/main_dog.json', width: 300, height: 300),
+                    child: Image.asset('assets/images/car.png'),
                   ),
                   Positioned(
-                    right: -30,
+                    right: 0,
                     top: 440,
                     child: Image.asset('assets/images/bottom_shadow.png'),
                   ),
                 
                 
                   Positioned(
-                    top: 520,
+                    top: 500,
                     right: 20,
                     left: 20,
                     child: TextButton(
@@ -243,7 +240,7 @@ class _LoginPageState extends State<LoginPage> {
               
                   ),
                   Positioned(
-                    top: 580,
+                    top: 560,
                     right: 20,
                     left: 20,
                     child: TextButton(
@@ -295,7 +292,7 @@ class _LoginPageState extends State<LoginPage> {
               
                   ),
                   Positioned(
-                    top: 640,
+                    top: 620,
                     right: 20,
                     left: 20,
                     child: TextButton(
@@ -310,22 +307,21 @@ class _LoginPageState extends State<LoginPage> {
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(20),
                             ),
-                            // backgroundColor: Colors.green,
-                             backgroundColor: Color(0xff64b9b2),
+                            backgroundColor: Color(0xFF235DFF),
                             padding: EdgeInsets.zero, // 내부 패딩을 0으로 설정하여 왼쪽 정렬이 가능하도록 함
                           ),
                           child: IntrinsicHeight(
                             child: Row(
                               children: <Widget>[
                                 Padding(
-                                  padding: EdgeInsets.only(left: 10), // 여기를 조절하여 아이콘의 왼쪽 패딩을 설정
-                                  child: Image.asset('assets/images/petmoji_icon.png', width: 33), // 아이콘으로 사용할 이미지
+                                  padding: EdgeInsets.only(left: 16), // 여기를 조절하여 아이콘의 왼쪽 패딩을 설정
+                                  child: Image.asset('assets/images/pickar_logo.png', width: 24), // 아이콘으로 사용할 이미지
                                 ),
                                 Expanded(
                                   child: Container(
                                     alignment: Alignment.center,
                                     child: Text(
-                                      '펫모지 이메일 로그인',
+                                      '픽카 이메일 로그인',
                                       
                                       textAlign: TextAlign.center, // 텍스트를 컨테이너의 가운데로 정렬
                                       style: TextStyle(

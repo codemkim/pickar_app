@@ -24,7 +24,7 @@ class _InitPageState extends State<InitPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xffD5FFF8),
+      backgroundColor: Colors.white,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -32,13 +32,13 @@ class _InitPageState extends State<InitPage> {
             SizedBox(height: 150),
             // 로고 이미지
             Image.asset(
-              'assets/images/petmoji_init.png',
+              'assets/images/init_logo.png',
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height /2,
             ),
             Expanded(
               child: Container(
-                color: Colors.white, // 하단 배경색을 흰색으로 설정
+                color: Colors.transparent, // 하단 배경색을 흰색으로 설정
               ),
             ),
           ],
