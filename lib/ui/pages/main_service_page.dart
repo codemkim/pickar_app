@@ -1,9 +1,11 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:lottie/lottie.dart';
 import 'package:pickar_app/blocs/auth_bloc.dart';
 import 'package:pickar_app/social/social_login.dart';
 import 'package:pickar_app/ui/pages/service_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class MainServicePage extends StatefulWidget {
@@ -16,11 +18,52 @@ class MainServicePage extends StatefulWidget {
 class _MainServicePageState extends State<MainServicePage> {
 
   final PageController _pageController = PageController();
+  SharedPreferences? prefs;
+  late bool _isGeolocatorEnabled;
   bool _isPageEvent = false;
   Timer? _timer;
 
   @override
   void initState() {
+
+    Future.delayed(Duration(microseconds: 100), () async {
+      LocationPermission permission;
+    
+      _isGeolocatorEnabled = await Geolocator.isLocationServiceEnabled();
+
+      if (!_isGeolocatorEnabled) {
+        // 위치 서비스를 활성화하도록 요청
+        return Future.error('Location services are disabled.');
+      }
+
+      permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
+        if (permission == LocationPermission.denied) {
+          // 권한이 거부된 경우 처리
+          return Future.error('Location permissions are denied');
+        }
+      }
+
+      if (permission == LocationPermission.deniedForever) {
+        // 권한이 영구적으로 거부된 경우 처리
+        return Future.error(
+            'Location permissions are permanently denied, we cannot request permissions.');
+      } 
+      // 현재 위치 얻기
+      Position initPosition = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.best);
+      print('initPosition====${initPosition}');
+
+      prefs = await SharedPreferences.getInstance();
+      print("loading shared preferences");
+      prefs?.setDouble('currentLatitude', initPosition.latitude);
+      prefs?.setDouble('currentLongitude', initPosition.longitude);
+
+      print(prefs?.getDouble('currentLatitude'));
+      print(prefs?.getDouble('currentLongitude'));
+
+    });
+
 
     _startAutoScroll();
   }
