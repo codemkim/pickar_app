@@ -11,14 +11,14 @@ import 'package:pickar_app/ui/pages/service_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
-class MainServicePage extends StatefulWidget {
-  const MainServicePage({super.key});
+class TestServicePage extends StatefulWidget {
+  const TestServicePage({super.key});
 
   @override
-  State<MainServicePage> createState() => _MainServicePageState();
+  State<TestServicePage> createState() => _TestServicePageState();
 }
 
-class _MainServicePageState extends State<MainServicePage> {
+class _TestServicePageState extends State<TestServicePage> {
 
   final PageController _pageController = PageController();
   SharedPreferences? prefs;
@@ -133,17 +133,17 @@ class _MainServicePageState extends State<MainServicePage> {
 
   PreferredSizeWidget _appbarWidget() {
     return AppBar(
-      title: IconButton(onPressed: () {}, icon: Icon(Icons.menu, size: 30,)),
+      // title: IconButton(onPressed: () {}, icon: Icon(Icons.menu, size: 30,)),
       backgroundColor: Color(0xFFFEFEFE),
-      actions: [
-        IconButton(onPressed: () {}, icon: Icon(Icons.notifications_none, size: 30,)),
-        IconButton(onPressed: () async{
+      // actions: [
+      //   IconButton(onPressed: () {}, icon: Icon(Icons.notifications_none, size: 30,)),
+      //   IconButton(onPressed: () async{
 
-          await authBloc.logout();
+      //     await authBloc.logout();
 
-        }, icon: Icon(Icons.logout,)),
+      //   }, icon: Icon(Icons.logout,)),
         
-      ],
+      // ],
     );
   }
 
@@ -196,7 +196,7 @@ class _MainServicePageState extends State<MainServicePage> {
                           Container(
                             height: 50,
                             decoration: BoxDecoration(
-                              color: Color(0xffE4EBF6),
+                              color: Colors.white,
                               borderRadius: BorderRadius.circular(7),
                             ),
                           ),
@@ -204,7 +204,7 @@ class _MainServicePageState extends State<MainServicePage> {
                           Container(
                             height: 150,
                             decoration: BoxDecoration(
-                              color:  Color(0xffF2F4F5),
+                              color:  Colors.white,
                               borderRadius: BorderRadius.circular(7),
                             ),
                             
@@ -232,13 +232,13 @@ class _MainServicePageState extends State<MainServicePage> {
                                     ),
                                     child: Stack(
                                       children: [
+                                        // Positioned(
+                                        //   top: 0,
+                                        //   left: 10,
+                                        //   // child: Lottie.asset('assets/animations/pick_1_park.json',width: 150, height: 150)
+                                        //   ),
                                         Positioned(
-                                          top: 0,
-                                          left: 10,
-                                          child: Lottie.asset('assets/animations/pick_1_park.json',width: 150, height: 150)
-                                          ),
-                                        Positioned(
-                                          bottom: 17,
+                                          bottom: 70,
                                           left: 30,
                                           child: Column(
                                             children: [
@@ -269,9 +269,9 @@ class _MainServicePageState extends State<MainServicePage> {
                                     ),
                                     child: Stack(
                                         children: [
-                                          Lottie.asset('assets/animations/find_park.json'),
+                                          // Lottie.asset('assets/animations/find_park.json'),
                                           Positioned(
-                                            bottom: 20,
+                                            bottom: 70,
                                             left: 25,
                                             child: Column(
                                               children: [
@@ -295,101 +295,101 @@ class _MainServicePageState extends State<MainServicePage> {
                             ),
                           ),
                           SizedBox(height: 15),
-                          Container(
-                            height: 70,
+                          // Container(
+                          //   height: 70,
         
-                            color:Colors.transparent,
-                            child: GestureDetector(
-                              onTap: () {
-                                  _stopAutoScroll();
-                                  _isPageEvent = true;
-                                  // 여기에 Content 1이 클릭되었을 때의 로직을 추가하세요.
-                                },
-                              child: PageView(
-                                controller: _pageController, 
-                                children: [
-                                  Container(
-                                    height: 40,
-                                    margin: EdgeInsets.symmetric(horizontal: 8), // 카드 사이의 간격
-                                    decoration: BoxDecoration(
-                                      color: Color(0xffF2F4F5),
-                                      borderRadius: BorderRadius.circular(8), // 둥근 모서리
-                                    ),
-                                    child: Center(
-                                      child: Text('content1'),
-                                    ),
-                                  ),
-                                  Container(
-                                    height: 40,
-                                    margin: EdgeInsets.symmetric(horizontal: 8), // 카드 사이의 간격
-                                    decoration: BoxDecoration(
-                                      color: Color(0xffF2F4F5),
-                                      borderRadius: BorderRadius.circular(8), // 둥근 모서리
-                                    ),
-                                    child: Center(
-                                      child: Text('content2'),
-                                    ),
-                                  ),
-                                  Container(
-                                    height: 40,
-                                    margin: EdgeInsets.symmetric(horizontal: 8), // 카드 사이의 간격
-                                    decoration: BoxDecoration(
-                                      color: Color(0xffF2F4F5),
-                                      borderRadius: BorderRadius.circular(8), // 둥근 모서리
-                                    ),
-                                    child: Center(
-                                      child: Text('content3'),
-                                    ),
-                                  ),
-                                  Container(
-                                    height: 40,
-                                    margin: EdgeInsets.symmetric(horizontal: 8), // 카드 사이의 간격
-                                    decoration: BoxDecoration(
-                                      color: Color(0xffF2F4F5),
-                                      borderRadius: BorderRadius.circular(8), // 둥근 모서리
-                                    ),
-                                    child: Center(
-                                      child: Text('content3'),
-                                    ),
-                                  ),
-                                  Container(
+                          //   color:Colors.transparent,
+                          //   child: GestureDetector(
+                          //     onTap: () {
+                          //         _stopAutoScroll();
+                          //         _isPageEvent = true;
+                          //         // 여기에 Content 1이 클릭되었을 때의 로직을 추가하세요.
+                          //       },
+                          //     child: PageView(
+                          //       controller: _pageController, 
+                          //       children: [
+                          //         Container(
+                          //           height: 40,
+                          //           margin: EdgeInsets.symmetric(horizontal: 8), // 카드 사이의 간격
+                          //           decoration: BoxDecoration(
+                          //             color: Colors.white,
+                          //             borderRadius: BorderRadius.circular(8), // 둥근 모서리
+                          //           ),
+                          //           child: Center(
+                          //             child: Text('content1'),
+                          //           ),
+                          //         ),
+                          //         Container(
+                          //           height: 40,
+                          //           margin: EdgeInsets.symmetric(horizontal: 8), // 카드 사이의 간격
+                          //           decoration: BoxDecoration(
+                          //             color: Colors.white,
+                          //             borderRadius: BorderRadius.circular(8), // 둥근 모서리
+                          //           ),
+                          //           child: Center(
+                          //             child: Text('content2'),
+                          //           ),
+                          //         ),
+                          //         Container(
+                          //           height: 40,
+                          //           margin: EdgeInsets.symmetric(horizontal: 8), // 카드 사이의 간격
+                          //           decoration: BoxDecoration(
+                          //             color: Colors.white,
+                          //             borderRadius: BorderRadius.circular(8), // 둥근 모서리
+                          //           ),
+                          //           child: Center(
+                          //             child: Text('content3'),
+                          //           ),
+                          //         ),
+                          //         Container(
+                          //           height: 40,
+                          //           margin: EdgeInsets.symmetric(horizontal: 8), // 카드 사이의 간격
+                          //           decoration: BoxDecoration(
+                          //             color: Colors.white,
+                          //             borderRadius: BorderRadius.circular(8), // 둥근 모서리
+                          //           ),
+                          //           child: Center(
+                          //             child: Text('content3'),
+                          //           ),
+                          //         ),
+                          //         Container(
                               
-                                    height: 40,
-                                    margin: EdgeInsets.symmetric(horizontal: 8), // 카드 사이의 간격
-                                    decoration: BoxDecoration(
-                                      color: Color(0xffF2F4F5),
-                                      borderRadius: BorderRadius.circular(8), // 둥근 모서리
-                                    ),
-                                    child: Center(
-                                      child: Text('content4'),
-                                    ),
-                                  ),
-                                  Container(
-                                    height: 40,
-                                    decoration: BoxDecoration(
-                                      color: Color(0xffF2F4F5),
-                                      borderRadius: BorderRadius.circular(8), // 둥근 모서리
-                                    ),
-                                    child: Center(
-                                      child: Text('content5'),
-                                    ),
-                                  ),
-                                ]
-                              ),
-                            ),
-                          ),
+                          //           height: 40,
+                          //           margin: EdgeInsets.symmetric(horizontal: 8), // 카드 사이의 간격
+                          //           decoration: BoxDecoration(
+                          //             color: Colors.white,
+                          //             borderRadius: BorderRadius.circular(8), // 둥근 모서리
+                          //           ),
+                          //           child: Center(
+                          //             child: Text('content4'),
+                          //           ),
+                          //         ),
+                          //         Container(
+                          //           height: 40,
+                          //           decoration: BoxDecoration(
+                          //             color: Colors.white,
+                          //             borderRadius: BorderRadius.circular(8), // 둥근 모서리
+                          //           ),
+                          //           child: Center(
+                          //             child: Text('content5'),
+                          //           ),
+                          //         ),
+                          //       ]
+                          //     ),
+                          //   ),
+                          // ),
                           SizedBox(height: 8), // 인디케이터와 카드 사이의 간격
-                          SmoothPageIndicator(
-                            controller: _pageController,  // PageController를 전달합니다.
-                            count:  5,  // 페이지의 총 수입니다.
-                            effect: const WormEffect(
-                              dotColor: Color(0xffF2F4F5),
-                              activeDotColor: Color(0xffA2A4A9),
-                              dotHeight: 10,
-                              dotWidth: 10,
-                              type: WormType.normal,
-                            ),
-                          ),
+                          // SmoothPageIndicator(
+                          //   controller: _pageController,  // PageController를 전달합니다.
+                          //   count:  5,  // 페이지의 총 수입니다.
+                          //   effect: const WormEffect(
+                          //     dotColor: Colors.white,
+                          //     activeDotColor: Color(0xffA2A4A9),
+                          //     dotHeight: 10,
+                          //     dotWidth: 10,
+                          //     type: WormType.normal,
+                          //   ),
+                          // ),
                           SizedBox(height: 15),
                           Container(
                             height: 100,
@@ -402,7 +402,7 @@ class _MainServicePageState extends State<MainServicePage> {
                                   // padding: EdgeInsets.all(10), // 내용과 테두리 사이의 간격
                                   width: (MediaQuery.of(context).size.width/2) - 25,
                                   decoration: BoxDecoration(
-                                    color:  Color(0xffF2F4F5),
+                                    color:  Colors.white,
                                     borderRadius: BorderRadius.circular(7),
                                   ),
                                   // child: IconButton(
@@ -416,7 +416,7 @@ class _MainServicePageState extends State<MainServicePage> {
                                   padding: EdgeInsets.all(16), // 내용과 테두리 사이의 간격
                                   width: (MediaQuery.of(context).size.width/2) - 25,
                                   decoration: BoxDecoration(
-                                    color:  Color(0xffF2F4F5),
+                                    color:  Colors.white,
                                     borderRadius: BorderRadius.circular(7),
                                   ),
         

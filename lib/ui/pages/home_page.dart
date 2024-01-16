@@ -4,6 +4,7 @@ import 'package:pickar_app/ui/pages/login_page.dart';
 import 'package:pickar_app/ui/pages/main_service_page.dart';
 import 'package:pickar_app/ui/pages/service_page.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:pickar_app/ui/pages/test_service_page.dart';
 
 
 
@@ -22,7 +23,7 @@ class _HomePageState extends State<HomePage> {
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.active) {
                 if (snapshot.hasData) {
-                  return MainServicePage();
+                  return TestServicePage();
                 
                 } else {
                   return LoginPage();
